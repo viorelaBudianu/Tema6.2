@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Students
 {
-    public class Student
+    public class Student : ICloneable, IComparable<Student>
     {
         public string FirstName;
         public string MiddleName;
@@ -34,7 +34,7 @@ namespace Students
             this.Specialty = specialty;
         }
 
-        
+
 
         public ulong SocialSecurityNumber
         {
@@ -52,8 +52,8 @@ namespace Students
                 {
                     this.SSN = value;
                     CheckSsn.Add(value);
-                }                  
-            
+                }
+
             }
         }
         public string Adress
@@ -61,7 +61,7 @@ namespace Students
             get { return this.PermanentAdress; }
             set { this.PermanentAdress = value; }
         }
-          
+
         public ulong Mobile
         {
             get { return this.MobilePhone; }
@@ -112,6 +112,11 @@ namespace Students
         {
             return !(Student.Equals(firstStudent, secondStudent));
         }
+        //overload GetHashCode()
+        public override int GetHashCode()
+        {
+            return FirstName.GetHashCode() ^ MiddleName.GetHashCode() ^ LastName.GetHashCode() ^ SSN.GetHashCode();
+        }
 
         // Override ToString() method
         public override string ToString()
@@ -132,6 +137,59 @@ namespace Students
 
             return builder.ToString();
         }
+        //Deep copy
+        public Student Clone()
+        {
+            Student s = new Student(this.FirstName, this.MiddleName, this.LastName, this.SSN, this.Mobile, this.PermanentAdress, this.Email, this.course, this.University, this.Faculty, this.Specialty);
+            return s;
+        }
 
+
+        object ICloneable.Clone()
+        {
+            return this.Clone();
+        }
+
+        public int CompareTo(Student curentStudent)
+        {
+            int firstNameCompare = this.FirstName.CompareTo(curentStudent.FirstName);
+
+            if (firstNameCompare != 0)
+            {
+                return firstNameCompare;
+            }
+            else
+            {
+                int middleNameCompare = this.MiddleName.CompareTo(curentStudent.MiddleName);
+
+                if (middleNameCompare != 0)
+                {
+                    return middleNameCompare;
+                }
+                else
+                {
+                    int lastNameCompare = this.LastName.CompareTo(curentStudent.LastName);
+
+                    if (lastNameCompare != 0)
+                    {
+                        return lastNameCompare;
+                    }
+                    else
+                    {
+                        int SSNCompare = this.SSN.CompareTo(curentStudent.SSN);
+
+                        if (SSNCompare != 0) // If names are equals, compare students by SSN
+                        {
+                            return SSNCompare;
+                        }
+                        else // Both students are equals
+                        {
+                            return 0;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
+
