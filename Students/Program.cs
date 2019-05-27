@@ -29,6 +29,14 @@ namespace Students
             Console.WriteLine("First student == third student? {0}", student1 == student);
             Console.WriteLine("First student != third student? {0}", student1 != student);
             Console.WriteLine();
+
+            Student s = student.Clone();
+            Console.WriteLine(student+"++++++++++\n"+s);
+
+            Console.WriteLine(student.CompareTo(s));
+            Console.WriteLine(student.CompareTo(student1));
+
+            Console.WriteLine($"HasCode for s (cloned) - {s.GetHashCode()}\nHasCode for student - {student.GetHashCode()}");
         }
     }
 }
